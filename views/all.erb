@@ -1,0 +1,8 @@
+<% @ideas.each_index do |index|%>
+  	<a href="idea/<%=index%>"><%= @ideas[index][:short] %></a> - 
+  		<%= @ideas[index][:long_info] %>
+  	<a href="edit/<%=index%>">Edit</a>
+  	<a href="delete/<%=index%>">Delete</a>
+  	<br>
+<%end %>
+<a href="new">New Idea</a>

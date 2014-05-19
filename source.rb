@@ -1,17 +1,9 @@
 require 'sinatra'
 require 'erb'
 require 'ostruct'
+require 'yaml'
 
-ideas = [
-	{
-		:short => "Heading",
-		:long_info => "Looooooooooooooooooooooong info"
-	},
-	{
-		:short => "Second Heading",
-		:long_info => "Another Looooooooooooooooooooooong info"
-	}
-]
+ideas = YAML.load_file('data.yaml')
 
 get '/' do
 	@ideas = ideas
@@ -21,6 +13,28 @@ end
 get '/idea/:id' do
 	@idea=ideas[params[:id].to_i]
   erb :idea
+end
+
+get '/edit/:id' do
+  @idea=ideas[params[:id].to_i]
+  erb :edit
+end
+
+post '/edit/:id' do
+  ideas[params[:id].to_i][:short] = params[:short]
+  ideas[params[:id].to_i][:long_info] = params[:long_info]
+  File.open('data.yaml', 'w') do |out|
+    YAML.dump(ideas, out)
+  end
+  redirect to('/idea/' + params[:id].to_s)
+end
+
+get '/delete/:id' do
+  ideas.slice!(params[:id].to_i)
+  File.open('data.yaml', 'w') do |out|
+    YAML.dump(ideas, out)
+  end
+  redirect to('/')
 end
 
 get '/new' do
@@ -33,23 +47,8 @@ post '/new' do
     :long_info => params[:long_info]
   }
   ideas.push(new_idea)
-   redirect to('/')
+  File.open('data.yaml', 'w') do |out|
+    YAML.dump(ideas, out)
+  end
+  redirect to('/')
 end
-__END__
-
-@@all
-<% @ideas.each_index do |index|%>
-  	<%= @ideas[index][:short] %> - <%= @ideas[index][:long_info] %>
-  	<a href="idea/<%=index%>">Edit</a>
-  	<br>
-<%end %>
-
-@@idea
-<%= @idea[:short] %> - <%= @idea[:long_info] %>
-
-@@new
-<form method="post">
- Heading: <input type="text" name="short"><br>
- Information: <input type="text" name="long_info">
- <input type="submit" value="Submit">
-</form>
