@@ -8,11 +8,19 @@
 		<title>Ideas</title>
 	</head>
 	<body>
-		<%= @idea[:short] %> - <%= @idea[:long_info] %>
-		<br/>
-		<a href="/edit/<%=params[:id]%>">Edit</a>
-		<a href="/delete/<%=params[:id]%>">Delete</a>
-		<br/><br/>
-		<a href="/">Home</a>
+		<div class="page-wrap">
+			<header class="page-header">
+				<h1 class="page-title">
+					<a href="/">Ideas</a>
+				</h1>
+			</header>
+			<main class="main-content">
+				<h2 class="entry-title"><%= @idea[:short] %></h2>
+				<p class="entry-description"><%= @idea[:long_info] %></p>
+				<br/>
+				<a href="/edit/<%=params[:id]%>">Edit</a>
+				<a href="/delete/<%=params[:id]%>">Delete</a>
+			</main>
+		</div>
 	</body>	
 </html>
