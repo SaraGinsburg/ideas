@@ -18,8 +18,8 @@
 				<h2 class="entry-title"><%= @idea[:short] %></h2>
 				<p class="entry-description"><%= @idea[:long_info] %></p>
 				<br/>
-				<a href="/edit/<%=params[:id]%>">Edit</a>
-				<a href="/delete/<%=params[:id]%>">Delete</a>
+				<a class="btn btn-default" href="/edit/<%=params[:id]%>">Edit</a>
+				<a class="btn btn-warning" href="/delete/<%=params[:id]%>">Delete</a>
 			</main>
 		</div>
 	</body>	
