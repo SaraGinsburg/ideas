@@ -1,6 +1,6 @@
 <form method="post">
  Heading: <input type="text" name="short" value="<%= @idea[:short] %>"><br>
- Information: <input type="text" name="long_info" value="<%= @idea[:long_info] %>">
+ Information: <textarea name="long_info"><%= @idea[:long_info] %></textarea>
  <input type="submit" value="Submit">
 </form>
 <a href="/">Home</a>

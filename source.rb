@@ -6,7 +6,10 @@ require 'erb'
 require 'ostruct'
 require 'yaml'
 
-ideas = YAML.load_file('data.yaml')
+require './database'
+
+ideas_db = Database.new
+ideas = ideas_db.read()
 
 get '/' do
 	@ideas = ideas
@@ -26,17 +29,13 @@ end
 post '/edit/:id' do
   ideas[params[:id].to_i][:short] = params[:short]
   ideas[params[:id].to_i][:long_info] = params[:long_info]
-  File.open('data.yaml', 'w') do |out|
-    YAML.dump(ideas, out)
-  end
+  ideas_db.write(ideas)
   redirect to('/idea/' + params[:id].to_s)
 end
 
 get '/delete/:id' do
   ideas.slice!(params[:id].to_i)
-  File.open('data.yaml', 'w') do |out|
-    YAML.dump(ideas, out)
-  end
+  ideas_db.write(ideas)
   redirect to('/')
 end
 
@@ -50,8 +49,6 @@ post '/new' do
     :long_info => params[:long_info]
   }
   ideas.push(new_idea)
-  File.open('data.yaml', 'w') do |out|
-    YAML.dump(ideas, out)
-  end
+  ideas_db.write(ideas)
   redirect to('/')
 end
