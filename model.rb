@@ -18,14 +18,6 @@ class Model
     @attributes = self.attributes.merge(filtered_attributes)
   end
 
-  def name
-    @attributes[:name]
-  end
-
-  def name=(value)
-    @attributes[:name] = value
-  end
-
   def method_missing(name, *args)
     method_name = name.to_s
     attribute_name = method_name.chomp('=').to_sym
