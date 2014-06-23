@@ -27,23 +27,19 @@ class Model
   end
 
   def method_missing(name, *args)
-    name = name.to_s
-    if name.end_with?('=')
-      name.chop!
-      name = name.to_sym
-      if self.class.attribute_names.include? name
-        @attributes[name] = args[0]
-      else
-        super
-      end
-    else
-      name = name.to_sym
-      if self.class.attribute_names.include? name
-        @attributes[name]
-      else
-        super
-      end
+    method_name = name.to_s
+    attribute_name = method_name.chomp('=').to_sym
+
+    if !self.class.attribute_names.include? attribute_name
+      return super
     end
+
+    if method_name.end_with?('=')
+      @attributes[attribute_name] = args[0]
+    else
+      @attributes[attribute_name]
+    end
+
     #puts "You called a nonexisting method #{name} with args #{args.inspect}"
   end
 
