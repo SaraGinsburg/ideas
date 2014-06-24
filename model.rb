@@ -1,3 +1,9 @@
+require 'erb'
+require 'ostruct'
+require 'yaml'
+
+require './database'
+
 class Model
   def initialize(attributes = {})
     self.attributes = attributes
@@ -31,26 +37,22 @@ class Model
     else
       @attributes[attribute_name]
     end
-
     #puts "You called a nonexisting method #{name} with args #{args.inspect}"
   end
 
   def save
-    attributes = {
-      short: short,
-      long_info: long_info,
-    }
-    if id
-      Database.update 'idea', attributes
+    file = 'data_model.yaml'
+    if attributes[:id]
+      Database.update file, self.attributes
     else
-      self.id = Database.create :idea, attributes
+      self.id = Database.create file, self.attributes
     end
   end
 end
 
 class Idea < Model
   def self.attribute_names
-    [:short, :long]
+    [:id, :short, :long]
   end
 end
 
@@ -59,3 +61,4 @@ i.attributes = {short: "bla", foo: "bar"}
 p i.short
 i.short=5
 p i.short
+i.save

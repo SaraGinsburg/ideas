@@ -1,7 +1,7 @@
 class Database
 
   def self.read(file_name)
-    return YAML.load_file(file_name)
+    return YAML.load_file(file_name) || {}
   end
 
   def self.write(file_name, records)
@@ -12,11 +12,9 @@ class Database
 
   def self.create(file_name, attributes)
     records = read file_name
-    if records.empty?
-      id = 1
-    else
-      id = records.last[:id] + 1
-    end
+    max_key = records.keys.max_by { |key| key.to_i } || 0
+    id = max_key + 1
+
     attributes[:id] = id
     records[id] = attributes
     write file_name, records
